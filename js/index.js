@@ -18,34 +18,47 @@
 
       5. Add a countdown timer - when the time is up, end the quiz, display the score and highlight the correct answers
 *************************** */
-
 window.addEventListener('DOMContentLoaded', () => {
-  const start = document.querySelector('#start');
+  // const start = document.querySelector('#start');
   start.addEventListener('click', function (e) {
     document.querySelector('#quizBlock').style.display = 'block';
     start.style.display = 'none';
-  });
+  }); // end of start addEventListener
+    
+ 
   // quizArray QUESTIONS & ANSWERS
   // q = QUESTION, o = OPTIONS, a = CORRECT ANSWER
   // Basic ideas from https://code-boxx.com/simple-javascript-quiz/
   const quizArray = [
     {
-      q: 'Which is the third planet from the sun?',
-      o: ['Saturn', 'Earth', 'Pluto', 'Mars'],
-      a: 1, // array index 1 - so Earth is the correct answer here
+      q: "Which is the third planet from the sun?",
+      o: ["Saturn", "Earth", "Pluto", "Mars"],
+      a: 1,
     },
     {
-      q: 'Which is the largest ocean on Earth?',
-      o: ['Atlantic Ocean', 'Indian Ocean', 'Arctic Ocean', 'Pacific Ocean'],
+      q: "Which is the largest ocean on Earth?",
+      o: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
       a: 3,
     },
     {
-      q: 'What is the capital of Australia',
-      o: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
+      q: "What is the capital of Australia?",
+      o: ["Sydney", "Canberra", "Melbourne", "Perth"],
       a: 1,
+    },
+    {
+      q: "What is the largest country in the world?",
+      o: ["Russia", "Canada", "China", "United States"],
+      a: 0,
+    },
+    {
+      q: "What language is the most spoken worldwide?",
+      o: ["Chinese", "Spanish", "Arabic", "English"],
+      a: 0,
     },
   ];
 
+    
+    
   // function to Display the quiz questions and answers from the object
   const displayQuiz = () => {
     const quizWrap = document.querySelector('#quizWrap');
@@ -60,14 +73,18 @@ window.addEventListener('DOMContentLoaded', () => {
                     </ul>
                     <div>&nbsp;</div>`;
       quizWrap.innerHTML = quizDisplay;
+  
     });
   };
+
 
   // Calculate the score
   const calculateScore = () => {
     let score = 0;
     quizArray.map((quizItem, index) => {
+      console.log(quizItem + '..............' +index);
       for (let i = 0; i < 4; i++) {
+  
         //highlight the li if it is the correct answer
         let li = `li_${index}_${i}`;
         let r = `radio_${index}_${i}`;
@@ -75,16 +92,57 @@ window.addEventListener('DOMContentLoaded', () => {
         radioElement = document.querySelector('#' + r);
 
         if (quizItem.a == i) {
-          //change background color of li element here
-        }
 
+          // If correct answer selected, add green border to Li Element
+
+          liElement.style.backgroundColor = '#C5F5CF';
+        }
+    
         if (radioElement.checked) {
-          // code for task 1 goes here
+          //code for Task 1 goes here
+          if (quizItem.a == i) {
+            score += 1;
+          }
         }
       }
     });
+    // display score
+    document.querySelector('#score').innerHTML = `Yourscore is ${score}`;
+     
   };
-
+    
   // call the displayQuiz function
-  displayQuiz();
+//   displayQuiz();
+// });
+  const submitButton = document.querySelector('#btnSubmit');
+submitButton.addEventListener('click', () => {
+  calculateScore();
+  clearInterval(interval);
+  submitButton.style.display = 'none';
 });
+ let count = 15;
+ const interval = setInterval(function () {
+   time = document.getElementById("time");
+   time.innerHTML = count;
+   document.querySelector("#time").style.color = "#FF0000";
+   count--;
+   if (count === 0) {
+     clearInterval(interval);
+     time.innerHTML = `${count}: Your Time Has Finished !!`;
+     document.querySelector("#time").style.color = "#FF0000";
+     liElement.style.backgroundColor = "";
+     calculateScore();
+   }
+ }, 1000);
+  
+    // call the displayQuiz function
+displayQuiz();
+});
+const resetButton = document.querySelector('#btnReset');
+resetButton.addEventListener('click', () => {
+ 
+  // location = window.location;
+  location.reload();
+
+});
+
